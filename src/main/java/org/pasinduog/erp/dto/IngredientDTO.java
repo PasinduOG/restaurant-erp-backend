@@ -34,4 +34,7 @@ public class IngredientDTO {
     @NotNull(message = "Minimum reorder level cannot be empty")
     @Positive(message = "Minimum reorder level should be positive value")
     BigDecimal minimumReorderLevel;
+
+    @NotNull(message = "Is Stock tracked cannot be null")
+    private Boolean isStockTracked;
 }

@@ -19,6 +19,7 @@ public class Ingredient {
     private BigDecimal unitCost;
     private BigDecimal currentStock;
     private BigDecimal minimumReorderLevel;
+    private Boolean isStockTracked;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
