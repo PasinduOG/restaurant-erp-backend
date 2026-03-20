@@ -1,10 +1,11 @@
-package org.pasinduog.erp.service;
+package org.pasinduog.erp.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.pasinduog.erp.dto.IngredientDTO;
 import org.pasinduog.erp.exception.BaseNotFoundException;
 import org.pasinduog.erp.mapper.IngredientMapper;
 import org.pasinduog.erp.repository.IngredientRepository;
+import org.pasinduog.erp.service.IngredientService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
