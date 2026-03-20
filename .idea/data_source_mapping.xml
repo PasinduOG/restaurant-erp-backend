@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V3__orders_and_pos_schema.sql" value="0fb23b62-fc56-4a36-95f0-bb838b5800c8" />
+  </component>
+</project>
