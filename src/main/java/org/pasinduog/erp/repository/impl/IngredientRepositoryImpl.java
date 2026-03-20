@@ -1,0 +1,83 @@
+package org.pasinduog.erp.repository.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.pasinduog.erp.entity.Ingredient;
+import org.pasinduog.erp.repository.IngredientRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@RequiredArgsConstructor
+public class IngredientRepositoryImpl implements IngredientRepository {
+    private final JdbcTemplate template;
+
+    @Override
+    public List<Ingredient> findAll() {
+        return template.query("SELECT * FROM ingredients", (rs, rowNum) -> new Ingredient(
+                rs.getLong("id"),
+                rs.getString("name"),
+                rs.getString("unit_of_measure"),
+                rs.getBigDecimal("unit_cost"),
+                rs.getBigDecimal("current_stock"),
+                rs.getBigDecimal("minimum_reorder_level"),
+                rs.getBoolean("is_stock_tracked"),
+                rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null,
+                rs.getTimestamp("updated_at") != null ? rs.getTimestamp("updated_at").toLocalDateTime() : null
+        ));
+    }
+
+    @Override
+    public Optional<Ingredient> findById(Long id) {
+        try {
+            return Optional.ofNullable(template.queryForObject("SELECT * FROM ingredients", (rs, rowNum) -> new Ingredient(
+                    rs.getLong("id"),
+                    rs.getString("name"),
+                    rs.getString("unit_of_measure"),
+                    rs.getBigDecimal("unit_cost"),
+                    rs.getBigDecimal("current_stock"),
+                    rs.getBigDecimal("minimum_reorder_level"),
+                    rs.getBoolean("is_stock_tracked"),
+                    rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null,
+                    rs.getTimestamp("updated_at") != null ? rs.getTimestamp("updated_at").toLocalDateTime() : null
+            )));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public boolean save(Ingredient ingredient) {
+        return template.update("INSERT INTO ingredients (name, unit_of_measure, unit_cost, current_stock, minimum_reorder_level, is_stock_tracked) VALUES (?,?,?,?,?,?)",
+                ingredient.getName(),
+                ingredient.getUnitOfMeasure(),
+                ingredient.getUnitCost(),
+                ingredient.getCurrentStock(),
+                ingredient.getMinimumReorderLevel()) > 0;
+    }
+
+    @Override
+    public boolean update(Ingredient ingredient) {
+        return template.update("UPDATE ingredients SET name = ?, unit_of_measure = ?, unit_cost = ?, current_stock = ?, minimum_reorder_level = ?, is_stock_tracked = ? WHERE id = ?",
+                ingredient.getName(),
+                ingredient.getUnitOfMeasure(),
+                ingredient.getUnitCost(),
+                ingredient.getCurrentStock(),
+                ingredient.getMinimumReorderLevel(),
+                ingredient.getId()) > 0;
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        return template.update("DELETE FROM ingredients WHERE id = ?", id) > 0;
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        Integer count = template.queryForObject("SELECT COUNT(*) FROM ingredients WHERE id = ?", Integer.class, id);
+        return count != null && count > 0;
+    }
+}
